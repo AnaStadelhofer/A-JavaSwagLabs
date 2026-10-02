@@ -6,5 +6,5 @@ public class Config {
             "https://www.saucedemo.com/";
 
     public static final String BROWSER =
-            "chrome";
+            System.getProperty("browser", "chrome");
 }

@@ -2,14 +2,17 @@ package base;
 
 import config.Config;
 import driver.DriverFactory;
+import extensions.ScreenshotOnFailureExtension;
 import factory.PageFactory;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import pages.*;
 
-public class BaseTest {
+@ExtendWith(ScreenshotOnFailureExtension.class)
+public class BaseTest implements ScreenshotOnFailureExtension.HasDriver {
 
     protected WebDriver driver;
     private PageFactory pageFactory;
@@ -27,6 +30,11 @@ public class BaseTest {
         pageFactory = new PageFactory(driver);
 
         faker = new Faker();
+    }
+
+    @Override
+    public WebDriver getDriver() {
+        return driver;
     }
 
     protected LoginPage loginPage() {
