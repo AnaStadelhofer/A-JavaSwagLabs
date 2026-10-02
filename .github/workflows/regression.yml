@@ -1,25 +1,28 @@
+name: Regression Tests
 
-  name: Regression Tests
+on:
+  push:
+    branches:
+      - master
 
-  on:
-    schedule:
-      - cron: '2 14 * * *'
+  schedule:
+    - cron: '2 14 * * *'
 
-    workflow_dispatch:
+  workflow_dispatch:
 
-  jobs:
-    regression:
-      runs-on: ubuntu-latest
+jobs:
+  regression:
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Setup Java
-          uses: actions/setup-java@v4
-          with:
-            java-version: '26'
-            distribution: 'temurin'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
 
-        - name: Run Regression Tests
-          run: mvn test
+      - name: Run Regression Tests
+        run: mvn test
