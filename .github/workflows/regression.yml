@@ -1,0 +1,25 @@
+
+  name: Regression Tests
+
+  on:
+    schedule:
+      - cron: '0 1 * * *'
+
+    workflow_dispatch:
+
+  jobs:
+    regression:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+
+        - name: Setup Java
+          uses: actions/setup-java@v4
+          with:
+            java-version: '26'
+            distribution: 'temurin'
+
+        - name: Run Regression Tests
+          run: mvn test
