@@ -1,7 +1,6 @@
 package factory;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.v137.page.Page;
 import pages.*;
 
 public class PageFactory {
