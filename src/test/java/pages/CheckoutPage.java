@@ -59,10 +59,12 @@ public class CheckoutPage extends BasePage {
 
     public void finalizarPedido() {
         click(btnFinalizar);
+        esperarUrl("checkout-complete.html");
     }
 
     public void cancelarBtn() {
         click(btnCancel);
+        esperarUrl("cart.html");
     }
 
     public void preencherTodosCampos(String nome, String sobrenome, String zip) {

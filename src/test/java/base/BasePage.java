@@ -32,4 +32,10 @@ public class BasePage {
                 ExpectedConditions.elementToBeClickable(elemento)
         ).click();
     }
+
+    protected void esperarUrl(String url) {
+        wait.until(
+                ExpectedConditions.urlContains(url)
+        );
+    }
 }

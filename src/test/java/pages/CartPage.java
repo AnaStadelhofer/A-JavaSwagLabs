@@ -25,6 +25,7 @@ public class CartPage extends BasePage {
 
     public void acessarCarrinho() {
         click(cartIcon);
+        esperarUrl("cart.html");
     }
 
     public String obterTitulo() {
@@ -33,10 +34,12 @@ public class CartPage extends BasePage {
 
     public void avançarCheckout() {
         click(btnCheckout);
+        esperarUrl("checkout-step-one.html");
     }
 
     public void cancelarCarrinho() {
         click(btnCancel);
+        esperarUrl("inventory.html");
     }
 
     public int obterQuantidadeProdutos() {
