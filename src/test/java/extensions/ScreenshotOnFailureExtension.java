@@ -1,7 +1,7 @@
 package extensions;
 
+import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.TestWatcher;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -10,14 +10,17 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Optional;
+import java.nio.file.StandardCopyOption;
 
-public class ScreenshotOnFailureExtension implements TestWatcher {
+public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback {
 
     @Override
-    public void testFailed(
-            ExtensionContext context,
-            Throwable cause) {
+    public void afterTestExecution(
+            ExtensionContext context) throws Exception {
+
+        if (context.getExecutionException().isEmpty()) {
+            return;
+        }
 
         Object testInstance = context.getRequiredTestInstance();
 
@@ -51,7 +54,8 @@ public class ScreenshotOnFailureExtension implements TestWatcher {
 
             Files.copy(
                     screenshot.toPath(),
-                    screenshotPath
+                    screenshotPath,
+                    StandardCopyOption.REPLACE_EXISTING
             );
 
         } catch (Exception e) {
@@ -66,3 +70,4 @@ public class ScreenshotOnFailureExtension implements TestWatcher {
         WebDriver getDriver();
     }
 }
+
