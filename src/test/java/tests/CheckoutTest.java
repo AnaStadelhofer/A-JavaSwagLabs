@@ -54,7 +54,7 @@ public class CheckoutTest extends BaseTest {
                 faker.address().zipCode()
         );
 
-        checkoutPage().clicarContinuar();
+        checkoutPage().clicarContinuar("checkout-step-one.html");
 
         assertEquals(
                 "Error: First Name is required",
@@ -89,7 +89,7 @@ public class CheckoutTest extends BaseTest {
                 faker.address().zipCode()
         );
 
-        checkoutPage().clicarContinuar();
+        checkoutPage().clicarContinuar("checkout-step-one.html");
 
         assertEquals(
                 "Error: Last Name is required",
@@ -124,7 +124,7 @@ public class CheckoutTest extends BaseTest {
                 ""
         );
 
-        checkoutPage().clicarContinuar();
+        checkoutPage().clicarContinuar("checkout-step-one.html");
 
         assertEquals(
                 "Error: Postal Code is required",
@@ -186,7 +186,7 @@ public class CheckoutTest extends BaseTest {
                 faker.address().zipCode()
         );
 
-        checkoutPage().clicarContinuar();
+        checkoutPage().clicarContinuar("checkout-step-two.html");
 
         assertEquals("Checkout: Overview", checkoutPage().obterTitulo());
 
