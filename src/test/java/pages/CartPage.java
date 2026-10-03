@@ -4,6 +4,7 @@ import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -25,7 +26,9 @@ public class CartPage extends BasePage {
 
     public void acessarCarrinho() {
         click(cartIcon);
-        esperarUrl("cart.html");
+        wait.until(
+                ExpectedConditions.urlContains("cart.html")
+        );
     }
 
     public String obterTitulo() {
@@ -34,7 +37,9 @@ public class CartPage extends BasePage {
 
     public void avançarCheckout() {
         click(btnCheckout);
-        esperarUrl("checkout-step-one.html");
+        wait.until(
+                ExpectedConditions.urlContains("checkout-step-one.html")
+        );
     }
 
     public void cancelarCarrinho() {

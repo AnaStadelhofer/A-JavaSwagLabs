@@ -4,6 +4,7 @@ import base.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
@@ -51,7 +52,18 @@ public class ProductsPage extends BasePage {
     }
 
     public void adicionarCarrinho(String nomeProduto) {
+        int quantidadeAtual = driver.findElements(qtdCarrinho).isEmpty()
+                ? 0
+                : obterQuantidadeCarrinho();
+
         click(botaoAdicionarProduto(nomeProduto));
+
+        wait.until(
+                ExpectedConditions.textToBePresentInElementLocated(
+                        qtdCarrinho,
+                        String.valueOf(quantidadeAtual + 1)
+                )
+        );
     }
 
     private By botaoRemoverProduto(String nomeProduto) {
@@ -59,7 +71,22 @@ public class ProductsPage extends BasePage {
     }
 
     public void removerCarrinho(String nomeProduto) {
+        int quantidadeAtual = obterQuantidadeCarrinho();
+
         click(botaoRemoverProduto(nomeProduto));
+
+        if (quantidadeAtual == 1) {
+            wait.until(
+                    ExpectedConditions.invisibilityOfElementLocated(qtdCarrinho)
+            );
+        } else {
+            wait.until(
+                    ExpectedConditions.textToBePresentInElementLocated(
+                            qtdCarrinho,
+                            String.valueOf(quantidadeAtual - 1)
+                    )
+            );
+        }
     }
 
     public void aplicarFiltroProduto(String filtro) {
