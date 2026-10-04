@@ -1,8 +1,7 @@
 package base;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -25,6 +24,27 @@ public class BasePage {
         return wait.until(
                 ExpectedConditions.visibilityOfElementLocated(elemento)
         );
+    }
+
+    protected void clickAndWait(By locator, ExpectedCondition<?> efeitoEsperado) {
+        WebDriverWait espera = new WebDriverWait(driver, Duration.ofSeconds(3));
+
+        for (int tentativa = 1; tentativa <= 3; tentativa++) {
+            if (!driver.findElements(locator).isEmpty()) {
+                try {
+                    click(locator);
+                } catch (StaleElementReferenceException ignored) {
+                    // a página re-renderizou, tenta de novo
+                }
+            }
+            try {
+                espera.until(efeitoEsperado);
+                return;
+            } catch (TimeoutException ignored) {
+                // clique pode ter sido perdido, repete
+            }
+        }
+        wait.until(efeitoEsperado); // última chance, com erro claro se falhar
     }
 
     protected void click(By elemento) {

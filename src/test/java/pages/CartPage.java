@@ -25,8 +25,7 @@ public class CartPage extends BasePage {
     // Metodos
 
     public void acessarCarrinho() {
-        click(cartIcon);
-        esperarUrl("cart.html");
+        clickAndWait(cartIcon, ExpectedConditions.urlContains("cart.html"));
     }
 
     public String obterTitulo() {
@@ -34,8 +33,7 @@ public class CartPage extends BasePage {
     }
 
     public void avançarCheckout() {
-        click(btnCheckout);
-        esperarUrl("checkout-step-one.html");
+        clickAndWait(btnCheckout, ExpectedConditions.urlContains("checkout-step-one.html"));
     }
 
     public void cancelarCarrinho() {
@@ -44,23 +42,22 @@ public class CartPage extends BasePage {
     }
 
     public int obterQuantidadeProdutos() {
+        find(title);
         return driver.findElements(produtos).size();
     }
 
     public List<String> obterNomesProdutos() {
-        return driver.findElements(nomesProdutos)
-                .stream()
-                .map(WebElement::getText)
-                .toList();
+        find(title);
+        return driver.findElements(nomesProdutos).stream()
+                .map(WebElement::getText).toList();
     }
 
     public List<Double> obterPrecosProdutos() {
-        return driver.findElements(precosProdutos)
-                .stream()
+        find(title);
+        return driver.findElements(precosProdutos).stream()
                 .map(WebElement::getText)
-                .map(preco -> preco.replace("$", ""))
-                .map(Double::parseDouble)
-                .toList();
+                .map(p -> p.replace("$", ""))
+                .map(Double::parseDouble).toList();
     }
 
     public void removerItemDoCarinho(String produto) {

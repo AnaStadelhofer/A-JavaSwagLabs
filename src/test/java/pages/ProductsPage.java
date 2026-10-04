@@ -56,8 +56,11 @@ public class ProductsPage extends BasePage {
                 ? 0
                 : obterQuantidadeCarrinho();
 
-        click(botaoAdicionarProduto(nomeProduto));
-
+        clickAndWait(
+                botaoAdicionarProduto(nomeProduto),
+                ExpectedConditions.textToBePresentInElementLocated(
+                        qtdCarrinho, String.valueOf(quantidadeAtual + 1))
+        );
         wait.until(
                 ExpectedConditions.textToBePresentInElementLocated(
                         qtdCarrinho,
@@ -97,21 +100,17 @@ public class ProductsPage extends BasePage {
     }
 
     public List<String> obterNomesProdutos() {
-
-        return driver.findElements(nomesProdutos)
-                .stream()
-                .map(WebElement::getText)
-                .toList();
+        find(title);
+        return driver.findElements(nomesProdutos).stream()
+                .map(WebElement::getText).toList();
     }
 
     public List<Double> obterPrecosProdutos() {
-
-        return driver.findElements(precosProdutos)
-                .stream()
+        find(title);
+        return driver.findElements(precosProdutos).stream()
                 .map(WebElement::getText)
-                .map(preco -> preco.replace("$", ""))
-                .map(Double::parseDouble)
-                .toList();
+                .map(p -> p.replace("$", ""))
+                .map(Double::parseDouble).toList();
     }
 
     public void abrirProdutoPorTitulo(String produto) {
