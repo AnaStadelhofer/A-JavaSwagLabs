@@ -37,6 +37,10 @@ jobs:
       - name: Run Regression Tests
         run: mvn test
 
+      - name: Listar resultados do Allure
+        if: always()
+        run: ls -la target/allure-results || echo "pasta não existe"
+
       - name: Generate Allure Report
         if: always()
         run: npx --yes allure-commandline generate target/allure-results --clean -o allure-report
@@ -61,6 +65,7 @@ jobs:
         if: always()
         uses: actions/upload-pages-artifact@v3
         with:
+          name: allure-report-${{ github.run_attempt }}
           path: allure-report/
 
   deploy-report:
@@ -74,3 +79,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: allure-report-${{ github.run_attempt }}
