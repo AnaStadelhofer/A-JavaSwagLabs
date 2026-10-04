@@ -119,7 +119,10 @@ public class ProductsPage extends BasePage {
                 "//div[@data-test='inventory-item-name' and text()='" + produto + "']"
         );
 
-        click(produtoLocator);
+        clickAndWait(
+                produtoLocator,
+                ExpectedConditions.urlContains("inventory-item.html")
+        );
     }
 
     public void abrirProdutoPorImg(String produto) {
@@ -128,6 +131,9 @@ public class ProductsPage extends BasePage {
                 "[data-test='inventory-item-" + produto + "-img']"
         );
 
-        click(produtoLocator);
+        clickAndWait(
+                produtoLocator,
+                ExpectedConditions.urlContains("inventory-item.html")
+        );
     }
 }
