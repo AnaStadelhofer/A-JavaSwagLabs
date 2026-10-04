@@ -26,9 +26,7 @@ public class CartPage extends BasePage {
 
     public void acessarCarrinho() {
         click(cartIcon);
-        wait.until(
-                ExpectedConditions.urlContains("cart.html")
-        );
+        esperarUrl("cart.html");
     }
 
     public String obterTitulo() {
@@ -37,9 +35,7 @@ public class CartPage extends BasePage {
 
     public void avançarCheckout() {
         click(btnCheckout);
-        wait.until(
-                ExpectedConditions.urlContains("checkout-step-one.html")
-        );
+        esperarUrl("checkout-step-one.html");
     }
 
     public void cancelarCarrinho() {

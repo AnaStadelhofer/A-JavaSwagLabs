@@ -54,18 +54,14 @@ public class CheckoutPage extends BasePage {
         find(zip).sendKeys(valor);
     }
 
-    public void clicarContinuar(String url) {
+    public void clicarContinuar(String urlExpect) {
         click(btnContinue);
-        wait.until(
-                ExpectedConditions.urlContains(url)
-        );
+        esperarUrl(urlExpect);
     }
 
     public void finalizarPedido() {
         click(btnFinalizar);
-        wait.until(
-                ExpectedConditions.urlContains("checkout-complete.html")
-        );
+        esperarUrl("checkout-complete.html");
     }
 
     public void cancelarBtn() {
