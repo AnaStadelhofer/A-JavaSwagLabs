@@ -1,16 +1,16 @@
 package extensions;
 
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.extension.AfterTestExecutionCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback {
 
@@ -35,6 +35,10 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
         }
 
         try {
+            byte[] bytes = ((TakesScreenshot) driver)
+                    .getScreenshotAs(OutputType.BYTES);
+
+            // 1) Salva o arquivo na pasta screenshots/
             Path directory = Paths.get("screenshots");
             Files.createDirectories(directory);
 
@@ -48,14 +52,14 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
             Path screenshotPath =
                     directory.resolve(className + "_" + testName + ".png");
 
-            File screenshot =
-                    ((TakesScreenshot) driver)
-                            .getScreenshotAs(OutputType.FILE);
+            Files.write(screenshotPath, bytes);
 
-            Files.copy(
-                    screenshot.toPath(),
-                    screenshotPath,
-                    StandardCopyOption.REPLACE_EXISTING
+            // 2) Anexa a imagem no relatório do Allure
+            Allure.addAttachment(
+                    "Screenshot da falha",
+                    "image/png",
+                    new ByteArrayInputStream(bytes),
+                    "png"
             );
 
         } catch (Exception e) {
@@ -70,4 +74,3 @@ public class ScreenshotOnFailureExtension implements AfterTestExecutionCallback 
         WebDriver getDriver();
     }
 }
-
