@@ -1,37 +1,76 @@
-  name: Regression Tests
+name: Regression Tests
 
-  on:
-    push:
-      branches:
-        - master
+on:
+  push:
+    branches:
+      - master
 
-    schedule:
-      - cron: '2 14 * * *'
+  schedule:
+    - cron: '2 14 * * *'
 
-    workflow_dispatch:
+  workflow_dispatch:
 
-  jobs:
-    regression:
-      runs-on: ubuntu-latest
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+jobs:
+  regression:
+    runs-on: ubuntu-latest
 
-        - name: Setup Java
-          uses: actions/setup-java@v4
-          with:
-            java-version: '26'
-            distribution: 'temurin'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Run Regression Tests
-          run: mvn test
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
 
-        - name: Upload Screenshots
-          if: always()
-          uses: actions/upload-artifact@v4
-          with:
-            name: screenshots
-            path: screenshots/
-            if-no-files-found: ignore
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
+      - name: Run Regression Tests
+        run: mvn test
+
+      - name: Generate Allure Report
+        if: always()
+        run: npx --yes allure-commandline generate target/allure-results --clean -o allure-report
+
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: screenshots/
+          if-no-files-found: ignore
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: target/allure-results/
+          if-no-files-found: ignore
+
+      - name: Upload Pages Artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: allure-report/
+
+  deploy-report:
+    needs: regression
+    if: always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
